@@ -1,0 +1,20 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ActionsWorkflow
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Delete preview deployments in Cloudflare account
+        run: python3 deletePreviewDeployments.py
