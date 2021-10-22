@@ -1,8 +1,9 @@
 import requests
+import os
 
-ACCOUNT_ID = 
-AUTH_EMAIL = 
-API_KEY = 
+ACCOUNT_ID = os.environ["ACCOUNT_ID"]
+AUTH_EMAIL = os.environ["AUTH_EMAIL"]
+API_KEY = os.environ["API_KEY"]
 
 globalHeaders = {
     "content-type": "application/json;charset=UTF-8",
