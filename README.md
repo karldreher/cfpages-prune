@@ -10,6 +10,11 @@ python3 deletePreviewDeployments.py
 
 ```
 This assumes that the following environment variables are set: 
+
 `ACCOUNT_ID` 
+
 `AUTH_EMAIL` 
+
 `API_KEY` 
+
+When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as Secrets within the repository.

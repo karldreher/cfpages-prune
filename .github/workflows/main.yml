@@ -18,3 +18,7 @@ jobs:
 
       - name: Delete preview deployments in Cloudflare account
         run: python3 deletePreviewDeployments.py
+        env:
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+          API_KEY: ${{ secrets.API_KEY }}
