@@ -16,18 +16,20 @@ def getProjects():
     projects = requests.get("https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects", headers=globalHeaders)
     return projects.json()
 
-def notAlias(deployment):
+def eligibleToDelete(deployment):
+    if deployment["environment"] == "production":
+        return False
     if deployment["aliases"] == None:
         return True
 
 def deleteProjectRevisions(projectName):
     deployments = requests.get("https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects/" + projectName + "/deployments", headers=globalHeaders)
-    deploymentsToDelete = filter(notAlias,deployments.json()["result"])
+    deploymentsToDelete = filter(eligibleToDelete,deployments.json()["result"])
+
     for deployment in deploymentsToDelete:
         endpoint = "https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects/" + projectName + "/deployments/" + deployment["id"]
         deleteRequest = requests.delete(endpoint, headers=globalHeaders)
         print(deleteRequest.json())
-
 
 if __name__=="__main__":
 
