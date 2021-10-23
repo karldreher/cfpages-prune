@@ -3,6 +3,9 @@
 name: ActionsWorkflow
 
 on:
+  # Scheduled to run automatically at 0:00 Saturday UTC.  
+  schedule:
+    - cron:  '0 0 * * SAT'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
