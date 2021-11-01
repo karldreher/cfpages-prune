@@ -11,9 +11,10 @@ globalHeaders = {
     "X-Auth-Key": API_KEY
 }
 
+accountUrl = "https://api.cloudflare.com/client/v4/accounts/{0}".format(ACCOUNT_ID)
 
 def getProjects():
-    projects = requests.get("https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects", headers=globalHeaders)
+    projects = requests.get(accountUrl + "/pages/projects", headers=globalHeaders)
     return projects.json()
 
 def eligibleToDelete(deployment):
@@ -23,13 +24,13 @@ def eligibleToDelete(deployment):
         return True
 
 def deleteProjectRevisions(projectName):
-    deployments = requests.get("https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects/" + projectName + "/deployments", headers=globalHeaders)
+    deployments = requests.get(accountUrl + "/pages/projects/" + projectName + "/deployments", headers=globalHeaders)
     deploymentsToDelete = filter(eligibleToDelete,deployments.json()["result"])
 
     for deployment in deploymentsToDelete:
-        print("Deleting {0} from project '{1}'...".format(deployment["id"],projectName))
-        endpoint = "https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects/" + projectName + "/deployments/" + deployment["id"]
-        deleteRequest = requests.delete(endpoint, headers=globalHeaders)
+        print("Deleting {0} from project '{1}'...".format(deployment["id"], projectName))
+        deleteEndpoint = accountUrl + "/pages/projects/" + projectName + "/deployments/" + deployment["id"]
+        deleteRequest = requests.delete(deleteEndpoint, headers=globalHeaders)
         if(deleteRequest.json()["success"] == True):
             print("Delete request was successful.")
         else:
