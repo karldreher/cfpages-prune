@@ -28,13 +28,13 @@ def deleteProjectRevisions(projectName):
     deploymentsToDelete = filter(eligibleToDelete,deployments.json()["result"])
 
     for deployment in deploymentsToDelete:
-        print("Deleting {0} from project '{1}'...".format(deployment["id"], projectName))
+        print("Deleting deployment '{0}' from project '{1}'...".format(deployment["id"], projectName))
         deleteEndpoint = accountUrl + "/pages/projects/" + projectName + "/deployments/" + deployment["id"]
         deleteRequest = requests.delete(deleteEndpoint, headers=globalHeaders)
         if(deleteRequest.json()["success"] == True):
-            print("Delete request was successful.")
+            print("Delete request for deployment '{0}' was successful.".format(deployment["id"]))
         else:
-            print("Delete request was not successful.  Additional information from the request is included below.")
+            print("Delete request for deployment '{0}' was not successful.  Additional information from the request is included below.".format(deployment["id"]))
             print(deleteRequest.json())
 
 if __name__=="__main__":
