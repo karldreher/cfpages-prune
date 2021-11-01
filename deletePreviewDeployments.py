@@ -27,9 +27,14 @@ def deleteProjectRevisions(projectName):
     deploymentsToDelete = filter(eligibleToDelete,deployments.json()["result"])
 
     for deployment in deploymentsToDelete:
+        print("Deleting {0} from project '{1}'...".format(deployment["id"],projectName))
         endpoint = "https://api.cloudflare.com/client/v4/accounts/" + ACCOUNT_ID + "/pages/projects/" + projectName + "/deployments/" + deployment["id"]
         deleteRequest = requests.delete(endpoint, headers=globalHeaders)
-        print(deleteRequest.json())
+        if(deleteRequest.json()["success"] == True):
+            print("Delete request was successful.")
+        else:
+            print("Delete request was not successful.  Additional information from the request is included below.")
+            print(deleteRequest.json())
 
 if __name__=="__main__":
 
