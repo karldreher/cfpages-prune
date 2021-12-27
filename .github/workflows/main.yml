@@ -18,7 +18,7 @@ jobs:
         run: pip3 install -r requirements.txt
 
       - name: Delete preview deployments in Cloudflare account
-        run: python3 deletePreviewDeployments.py
+        run: python3 deletePreviewDeployments.py --redact
         env:
           ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
