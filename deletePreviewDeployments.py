@@ -1,15 +1,14 @@
-import requests
 import os
 import argparse
 import logging
 import sys
-
+import requests
 
 logging.Formatter('%(asctime)s %(levelname)s - %(message)s', style='{')
 file_handler = logging.FileHandler(filename=__file__ + ".log")
 stdout_handler = logging.StreamHandler(sys.stdout)
-loggingHandlers = [file_handler, stdout_handler]
-logging.basicConfig(handlers=loggingHandlers, format='%(asctime)s %(levelname)s - %(message)s',
+logging_handlers = [file_handler, stdout_handler]
+logging.basicConfig(handlers=logging_handlers, format='%(asctime)s %(levelname)s - %(message)s',
                     level='INFO', datefmt='%Y-%m-%d %I:%M:%S %p')
 
 
@@ -29,53 +28,52 @@ globalHeaders = {
     "X-Auth-Key": API_KEY
 }
 
-accountUrl = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
+ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
     ACCOUNT_ID)
 
 
-def getProjects():
+def get_projects():
     projects = requests.get(
-        accountUrl + "/pages/projects", headers=globalHeaders)
+        ACCOUNT_URL + "/pages/projects", headers=globalHeaders)
     return projects.json()
 
 
-def eligibleToDelete(deployment):
+def delete_eligible(deployment):
     if deployment["environment"] == "production":
         return False
-    if deployment["aliases"] == None:
+    if deployment["aliases"] is None:
         return True
+    return None
 
 
-def deleteProjectRevisions(projectName, args):
-    projectIdentifier = project["id"] if vars(
-        args).get("redact") == True else project["name"]
-    whatIf = "Would take action: " if vars(args).get("whatif") == True else ""
+def delete_project_revisions(project_name, args):
+    project_identifier = project["id"] if vars(args).get("redact") else project["name"]
+    what_if = "Would take action: " if vars(args).get("whatif") else ""
 
-    # although projectIdentifier allows redacting project name, it is still mandatory for api calls.
-    projectName = project["name"]
+    # although project_identifier allows redacting project name, it is still mandatory for api calls.
+    project_name = project["name"]
 
     deployments = requests.get(
-        accountUrl + "/pages/projects/" + projectName + "/deployments", headers=globalHeaders)
-    deploymentsToDelete = filter(
-        eligibleToDelete, deployments.json()["result"])
+        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders)
+    deployments_to_delete = filter(delete_eligible, deployments.json()["result"])
 
-    for deployment in deploymentsToDelete:
+    for deployment in deployments_to_delete:
         logging.info("{2}Deleting deployment '{0}' from project '{1}'...".format(
-            deployment["id"], projectIdentifier, whatIf))
-        deleteEndpoint = accountUrl + "/pages/projects/" + \
-            projectName + "/deployments/" + deployment["id"]
+            deployment["id"], project_identifier, what_if))
+        delete_endpoint = ACCOUNT_URL + "/pages/projects/" + \
+            project_name + "/deployments/" + deployment["id"]
 
-        if vars(args).get("whatif") == False:
-            deleteRequest = requests.delete(
-                deleteEndpoint, headers=globalHeaders)
+        if not vars(args).get("whatif"):
+            delete_request = requests.delete(
+                delete_endpoint, headers=globalHeaders)
 
-            if(deleteRequest.json()["success"] == True):
+            if delete_request.json()["success"] == True:
                 logging.info(
                     "Delete request for deployment '{0}' was successful.".format(deployment["id"]))
             else:
                 logging.error("Delete request for deployment '{0}' was not successful.  Additional information from the request is included below.".format(
                     deployment["id"]))
-                logging.error(deleteRequest.json())
+                logging.error(delete_request.json())
 
 
 if __name__ == "__main__":
@@ -83,8 +81,8 @@ if __name__ == "__main__":
     args = argparser.parse_args()
     logging.info("Started {0} with options: {1}".format(__file__, vars(args)))
 
-    projects = getProjects()
+    projects = get_projects()
     for project in projects["result"]:
-        deleteProjectRevisions(project, args)
-    if vars(args).get("whatif") == True:
+        delete_project_revisions(project, args)
+    if vars(args).get("whatif"):
         logging.info("What if scenario: No action taken.")
