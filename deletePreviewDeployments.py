@@ -11,7 +11,6 @@ logging_handlers = [file_handler, stdout_handler]
 logging.basicConfig(handlers=logging_handlers, format='%(asctime)s %(levelname)s - %(message)s',
                     level='INFO', datefmt='%Y-%m-%d %I:%M:%S %p')
 
-
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--redact", action="store_true", default=False, required=False,
                        help="When \"--redact\" is used, project names will be replaced with IDs in log output.")
@@ -31,12 +30,15 @@ globalHeaders = {
 ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
     ACCOUNT_ID)
 
-
 def get_projects():
     projects = requests.get(
         ACCOUNT_URL + "/pages/projects", headers=globalHeaders)
     return projects.json()
 
+def get_deployments(project_name):
+    deployments = requests.get(
+        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders)
+    return deployments.json()
 
 def delete_eligible(deployment):
     if deployment["environment"] == "production":
@@ -45,23 +47,19 @@ def delete_eligible(deployment):
         return True
     return None
 
-
-def delete_project_revisions(project_name, args):
+def delete_project_revisions(project, args):
+    # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
 
-    # although project_identifier allows redacting project name, it is still mandatory for api calls.
-    project_name = project["name"]
-
-    deployments = requests.get(
-        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders)
-    deployments_to_delete = filter(delete_eligible, deployments.json()["result"])
+    deployments = get_deployments(project["name"])
+    deployments_to_delete = filter(delete_eligible, deployments["result"])
 
     for deployment in deployments_to_delete:
         logging.info("{2}Deleting deployment '{0}' from project '{1}'...".format(
             deployment["id"], project_identifier, what_if))
         delete_endpoint = ACCOUNT_URL + "/pages/projects/" + \
-            project_name + "/deployments/" + deployment["id"]
+            project["name"] + "/deployments/" + deployment["id"]
 
         if not vars(args).get("whatif"):
             delete_request = requests.delete(
