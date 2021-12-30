@@ -1,5 +1,4 @@
 import os
-import argparse
 import logging
 import sys
 import requests
@@ -10,12 +9,6 @@ stdout_handler = logging.StreamHandler(sys.stdout)
 logging_handlers = [file_handler, stdout_handler]
 logging.basicConfig(handlers=logging_handlers, format='%(asctime)s %(levelname)s - %(message)s',
                     level='INFO', datefmt='%Y-%m-%d %I:%M:%S %p')
-
-argparser = argparse.ArgumentParser()
-argparser.add_argument("--redact", action="store_true", default=False, required=False,
-                       help="When \"--redact\" is used, project names will be replaced with IDs in log output.")
-argparser.add_argument("--whatif", action="store_true", default=False, required=False,
-                       help="When \"--whatif\" is used, delete action will be deferred.")
 
 ACCOUNT_ID = os.environ["ACCOUNT_ID"]
 AUTH_EMAIL = os.environ["AUTH_EMAIL"]
@@ -48,6 +41,7 @@ def delete_eligible(deployment):
     return None
 
 def delete_project_revisions(project, args):
+    logging.info("Started with options: {1}".format(vars(args)))
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
@@ -72,15 +66,5 @@ def delete_project_revisions(project, args):
                 logging.error("Delete request for deployment '{0}' was not successful.  Additional information from the request is included below.".format(
                     deployment["id"]))
                 logging.error(delete_request.json())
-
-
-if __name__ == "__main__":
-
-    args = argparser.parse_args()
-    logging.info("Started {0} with options: {1}".format(__file__, vars(args)))
-
-    projects = get_projects()
-    for project in projects["result"]:
-        delete_project_revisions(project, args)
     if vars(args).get("whatif"):
         logging.info("What if scenario: No action taken.")
