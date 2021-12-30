@@ -46,7 +46,7 @@ def delete_eligible(deployment):
     return None
 
 
-def delete_project_revisions(project_name, args):
+def delete_project_revisions(project, args):
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
 
