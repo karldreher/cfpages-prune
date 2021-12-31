@@ -1,7 +1,7 @@
 """Console script for cf_pages_delete_previews."""
 import argparse
 import sys
-import cf_pages_delete_previews
+from cf_pages_delete_previews import lib
 
 def main():
     """Console script for cf_pages_delete_previews."""
@@ -12,9 +12,9 @@ def main():
                         help="When \"--whatif\" is used, delete action will be deferred.")
     args = argparser.parse_args()
     
-    projects = cf_pages_delete_previews.get_projects()
+    projects = lib.get_projects()
     for project in projects["result"]:
-        cf_pages_delete_previews.delete_project_revisions(project, args)
+        lib.delete_project_revisions(project, args)
 
 
 
