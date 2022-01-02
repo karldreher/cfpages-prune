@@ -11,14 +11,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: pip3 install -r requirements.txt
+      - name: Install pipx
+        run: pip3 install --user pipx
+
+      - name: Ensure pipx is in path
+        run: pipx ensurepath
+
+      - name: Install cf_pages_delete_previews
+        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git@develop
 
       - name: Delete preview deployments in Cloudflare account
-        run: python3 deletePreviewDeployments.py --redact
+        run: cf_pages_delete_previews --redact
         env:
           ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
