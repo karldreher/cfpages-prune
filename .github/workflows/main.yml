@@ -1,17 +1,16 @@
 name: ActionsWorkflow
 
 on:
-  # Scheduled to run automatically at 0:00 Saturday UTC.  
+  # Scheduled to run automatically at 0:00 Saturday UTC.
   schedule:
-    - cron:  '0 0 * * SAT'
+    - cron: "0 0 * * SAT"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  build:
+  automated-run:
     runs-on: ubuntu-latest
     steps:
-
       - name: Install pipx
         run: pip3 install --user pipx
 
@@ -19,7 +18,7 @@ jobs:
         run: pipx ensurepath
 
       - name: Install cf_pages_delete_previews
-        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git@develop
+        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
 
       - name: Delete preview deployments in Cloudflare account
         run: cf_pages_delete_previews --redact

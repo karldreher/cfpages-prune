@@ -2,14 +2,24 @@
 
 This project contains a Python script for deleting preview deployments of **all** Cloudflare Pages projects within an account.  It is intended to be run as a scheduled job, e.g. with Github Actions.
 
+## Build
+
+The project uses Poetry to conduct builds.  When building locally, ensure Poetry is installed:
+```bash
+pip --install poetry
+poetry install
+```
+
 ## Usage
 
+This tool is easiest to install using Pipx, after which it can be run using a convenient name: 
 ```bash
-pip3 install -r requirements.txt
-python3 deletePreviewDeployments.py
+pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
+cf_pages_delete_previews
 
 ```
-This assumes that the following environment variables are set: 
+
+The tool assumes that the following environment variables are set: 
 
 `ACCOUNT_ID` 
 
@@ -17,14 +27,16 @@ This assumes that the following environment variables are set:
 
 `API_KEY` 
 
-When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as Secrets within the repository.
+These values correspond to those found in the Cloudflare account.  
+
+When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as [Secrets within the repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository).
 
 ### Options
 Other options which can manipulate usage can be described succinctly using `--help`: 
 
 ```
-> python deletePreviewDeployments.py --help 
-usage: deletePreviewDeployments.py [-h] [--redact] [--whatif]
+> cf_pages_delete_previews
+usage: cf_pages_delete_previews [-h] [--redact] [--whatif]
 
 optional arguments:
   -h, --help  show this help message and exit

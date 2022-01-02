@@ -16,8 +16,5 @@ def main():
     for project in projects["result"]:
         lib.delete_project_revisions(project, args)
 
-
-
-
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
