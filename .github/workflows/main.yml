@@ -21,7 +21,7 @@ jobs:
         run: pipx ensurepath
 
       - name: Install cf_pages_delete_previews
-        run: pipx install pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git@develop
+        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git@develop
 
       - name: Delete preview deployments in Cloudflare account
         run: cf_pages_delete_previews
