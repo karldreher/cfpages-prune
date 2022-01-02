@@ -40,16 +40,17 @@ def delete_eligible(deployment):
     return None
 
 def delete_project_revisions(project, args):
-    logging.info("Started with options: %s", vars(args))
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
+    
+    logging.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
     deployments = get_deployments(project["name"])
     deployments_to_delete = filter(delete_eligible, deployments["result"])
 
     for deployment in deployments_to_delete:
-        logging.info("%s Deleting deployment \'%s\' from project \'%s\'..." %
+        logging.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
             (what_if, deployment["id"], project_identifier))
         
         delete_endpoint = ACCOUNT_URL + "/pages/projects/" + \
