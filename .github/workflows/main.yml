@@ -24,7 +24,7 @@ jobs:
         run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git@develop
 
       - name: Delete preview deployments in Cloudflare account
-        run: cf_pages_delete_previews
+        run: cf_pages_delete_previews --redact
         env:
           ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
