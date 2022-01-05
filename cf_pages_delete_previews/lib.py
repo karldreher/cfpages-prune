@@ -33,9 +33,9 @@ def get_deployments(project_name):
     return deployments.json()
 
 def delete_eligible(deployment):
-    if deployment["environment"] == "production":
+    if deployment.get("environment") == "production":
         return False
-    if deployment["aliases"] is None:
+    if deployment.get("aliases") is None and deployment.get("name"):
         return True
     return None
 
