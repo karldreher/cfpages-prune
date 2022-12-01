@@ -1,6 +1,5 @@
 import os
 import logging
-import sys
 import requests
 log = logging.getLogger(__name__)
 
