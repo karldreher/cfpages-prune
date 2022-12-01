@@ -3,11 +3,10 @@ import logging
 import sys
 import requests
 log = logging.getLogger(__name__)
-log.info("Hello Logging")
 
-ACCOUNT_ID = os.environ["ACCOUNT_ID"]
-AUTH_EMAIL = os.environ["AUTH_EMAIL"]
-API_KEY = os.environ["API_KEY"]
+ACCOUNT_ID = os.environ["CF_ACCOUNT_ID"]
+AUTH_EMAIL = os.environ["CF_AUTH_EMAIL"]
+API_KEY = os.environ["CF_API_KEY"]
 
 globalHeaders = {
     "content-type": "application/json;charset=UTF-8",

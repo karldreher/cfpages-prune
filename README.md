@@ -12,27 +12,27 @@ poetry install
 
 ## Usage
 
-This tool is easiest to install using Pipx, after which it can be run using a convenient name: 
+This tool is easiest to install using Pipx, after which it can be run using a convenient name:
 ```bash
 pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
 cf_pages_delete_previews
 
 ```
 
-The tool assumes that the following environment variables are set: 
+The tool assumes that the following environment variables are set:
 
-`ACCOUNT_ID` 
+`CF_ACCOUNT_ID`
 
-`AUTH_EMAIL` 
+`CF_AUTH_EMAIL`
 
-`API_KEY` 
+`CF_API_KEY`
 
-These values correspond to those found in the Cloudflare account.  
+These values correspond to those found in the Cloudflare account.
 
 When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as [Secrets within the repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository).
 
 ### Options
-Other options which can manipulate usage can be described succinctly using `--help`: 
+Other options which can manipulate usage can be described succinctly using `--help`:
 
 ```
 > cf_pages_delete_previews
