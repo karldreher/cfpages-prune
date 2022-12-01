@@ -42,5 +42,5 @@ optional arguments:
   -h, --help  show this help message and exit
   --redact    When "--redact" is used, project names will be replaced with IDs
               in log output.
-  --whatif    When "--whatif" is used, delete action will be deferred.
+  --whatif    When "--whatif" is used, delete action will be skipped.
 ```

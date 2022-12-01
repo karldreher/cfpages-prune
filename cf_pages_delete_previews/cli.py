@@ -11,7 +11,7 @@ def main():
     argparser.add_argument("--redact", action="store_true", default=False, required=False,
                         help="When \"--redact\" is used, project names will be replaced with IDs in log output.")
     argparser.add_argument("--whatif", action="store_true", default=False, required=False,
-                        help="When \"--whatif\" is used, delete action will be deferred.")
+                        help="When \"--whatif\" is used, delete action will be skipped.")
     args = argparser.parse_args()
     projects = lib.get_projects()
 
