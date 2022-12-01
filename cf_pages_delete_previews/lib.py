@@ -2,12 +2,8 @@ import os
 import logging
 import sys
 import requests
-
-file_handler = logging.FileHandler(filename='cf_pages_delete_previews' + '.log')
-stdout_handler = logging.StreamHandler(sys.stdout)
-logging_handlers = [file_handler, stdout_handler]
-logging.basicConfig(handlers=logging_handlers, format='%(asctime)s %(levelname)s - %(message)s',
-                    level='INFO', datefmt='%Y-%m-%d %I:%M:%S %p')
+log = logging.getLogger(__name__)
+log.info("Hello Logging")
 
 ACCOUNT_ID = os.environ["ACCOUNT_ID"]
 AUTH_EMAIL = os.environ["AUTH_EMAIL"]
@@ -25,7 +21,10 @@ ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
 def get_projects():
     projects = requests.get(
         ACCOUNT_URL + "/pages/projects", headers=globalHeaders)
-    return projects.json()
+    if projects.ok:
+        return projects.json()
+    else:
+        return None
 
 def get_deployments(project_name):
     deployments = requests.get(
@@ -43,16 +42,16 @@ def delete_project_revisions(project, args):
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
-    
-    logging.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
+
+    log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
     deployments = get_deployments(project["name"])
     deployments_to_delete = filter(delete_eligible, deployments["result"])
 
     for deployment in deployments_to_delete:
-        logging.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
+        log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
             (what_if, deployment["id"], project_identifier))
-        
+
         delete_endpoint = ACCOUNT_URL + "/pages/projects/" + \
             project["name"] + "/deployments/" + deployment["id"]
 
@@ -61,11 +60,11 @@ def delete_project_revisions(project, args):
                 delete_endpoint, headers=globalHeaders)
 
             if delete_request.json()["success"] == True:
-                logging.info(
+                log.info(
                     "Delete request for deployment '%s' was successful.", deployment["id"])
             else:
-                logging.error("Delete request for deployment '%s' was not successful.  Additional information from the request is included below.", deployment["id"])
-                logging.error(delete_request.json())
+                log.error("Delete request for deployment '%s' was not successful.  Additional information from the request is included below.", deployment["id"])
+                log.error(delete_request.json())
 
     if vars(args).get("whatif"):
-        logging.info("What if scenario: No action taken.")
+        log.info("What if scenario: No action taken.")
