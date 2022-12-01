@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "cloudflare-pages-delete-revisions"
+name = "cfpages-prune"
 version = "0.1.0"
 description = "Delete preview deployments of Cloudflare Pages across an entire Cloudflare account."
 authors = ["Karl Dreher <karldreher@outlook.com>"]
@@ -22,4 +22,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-cf_pages_delete_previews = 'cf_pages_delete_previews.cli:main'
+cfpages-prune = 'cf_pages_delete_previews.cli:main'

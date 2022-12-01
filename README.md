@@ -1,4 +1,4 @@
-# cloudflare-pages-delete-revisions
+# cfpages-prune
 
 This project contains a Python script for deleting preview deployments of **all** Cloudflare Pages projects within an account.  It is intended to be run as a scheduled job, e.g. with Github Actions.
 
@@ -15,7 +15,7 @@ poetry install
 This tool is easiest to install using Pipx, after which it can be run using a convenient name:
 ```bash
 pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
-cf_pages_delete_previews
+cfpages-prune
 
 ```
 
@@ -35,8 +35,8 @@ When using Github Actions (as is done in `.github/workflows/main.yml`), these th
 Other options which can manipulate usage can be described succinctly using `--help`:
 
 ```
-> cf_pages_delete_previews
-usage: cf_pages_delete_previews [-h] [--redact] [--whatif]
+> cfpages-prune
+usage: cfpages-prune [-h] [--redact] [--whatif]
 
 optional arguments:
   -h, --help  show this help message and exit
