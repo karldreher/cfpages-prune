@@ -14,20 +14,19 @@ poetry install
 
 This tool is easiest to install using Pipx, after which it can be run using a convenient name:
 ```bash
-pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
+pipx install git+https://github.com/karldreher/cfpages-prune.git
 cfpages-prune
 
 ```
 
 The tool assumes that the following environment variables are set:
 
-`CF_ACCOUNT_ID`
+`CF_ACCOUNT_ID` - This corresponds to your Cloudflare Account ID.
 
-`CF_AUTH_EMAIL`
+`CF_AUTH_EMAIL` - The email address with access to this Cloudflare account.
 
-`CF_API_KEY`
+`CF_API_KEY` - This **MUST** be a Global API key.  This is not a limitation of this tool, but one of the Cloudflare API.  (Pages projects **read** access currently requires this.)
 
-These values correspond to those found in the Cloudflare account.
 
 When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as [Secrets within the repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository).
 
