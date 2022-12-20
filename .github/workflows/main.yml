@@ -18,7 +18,7 @@ jobs:
         run: pipx ensurepath
 
       - name: Install cfpages-prune
-        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
+        run: pipx install git+https://github.com/karldreher/cfpages-prune.git
 
       - name: Delete preview deployments in Cloudflare account
         run: cfpages-prune --redact
