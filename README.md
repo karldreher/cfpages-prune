@@ -10,6 +10,11 @@ pip --install poetry
 poetry install
 ```
 
+If developing locally, it's reccomended that you install the `dev` poetry group:
+```bash
+poetry install --with=dev
+```
+
 ## Usage
 
 This tool is easiest to install using Pipx, after which it can be run using a convenient name:
