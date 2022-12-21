@@ -35,8 +35,8 @@ jobs:
         run: poetry run pytest
         env:
           CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-          AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
-          API_KEY: ${{ secrets.API_KEY }}
+          CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+          CF_API_KEY: ${{ secrets.API_KEY }}
 
   release:
     needs: test
