@@ -1,6 +1,7 @@
 import os
 import logging
 import requests
+
 log = logging.getLogger(__name__)
 
 ACCOUNT_ID = os.environ["CF_ACCOUNT_ID"]
@@ -18,15 +19,14 @@ ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
 
 def get_projects():
     projects = requests.get(
-        ACCOUNT_URL + "/pages/projects", headers=globalHeaders)
+        ACCOUNT_URL + "/pages/projects", headers=globalHeaders, timeout=5)
     if projects.ok:
         return projects.json()
-    else:
-        return None
+    return None
 
 def get_deployments(project_name):
     deployments = requests.get(
-        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders)
+        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders, timeout=5)
     return deployments.json()
 
 def delete_eligible(deployment):
@@ -55,7 +55,7 @@ def delete_project_revisions(project, args):
 
         if not vars(args).get("whatif"):
             delete_request = requests.delete(
-                delete_endpoint, headers=globalHeaders)
+                delete_endpoint, headers=globalHeaders, timeout=5)
 
             if delete_request.json()["success"] == True:
                 log.info(
