@@ -17,11 +17,11 @@ jobs:
       - name: Ensure pipx is in path
         run: pipx ensurepath
 
-      - name: Install cf_pages_delete_previews
-        run: pipx install git+https://github.com/karldreher/cloudflare-pages-delete-revisions.git
+      - name: Install cfpages-prune
+        run: pipx install git+https://github.com/karldreher/cfpages-prune.git
 
       - name: Delete preview deployments in Cloudflare account
-        run: cf_pages_delete_previews --redact
+        run: cfpages-prune --redact
         env:
           ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
