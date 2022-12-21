@@ -23,6 +23,6 @@ jobs:
       - name: Delete preview deployments in Cloudflare account
         run: cfpages-prune --redact
         env:
-          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-          AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
-          API_KEY: ${{ secrets.API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+          CF_API_KEY: ${{ secrets.API_KEY }}
