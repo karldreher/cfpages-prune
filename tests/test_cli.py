@@ -1,1 +1,0 @@
-from cf_pages_delete_previews import cli
