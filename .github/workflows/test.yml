@@ -20,17 +20,8 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: false
 
-      - name: Set up cache
-        id: poetry-cache
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: poetry-${{ runner.os }}-
-
       - name: Install dependencies
         run: poetry install --with dev
-        if: steps.poetry-cache.outputs.cache-hit != 'true'
 
       - name: Pytest
         run: poetry run pytest
