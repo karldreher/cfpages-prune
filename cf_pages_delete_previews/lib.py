@@ -1,32 +1,20 @@
-import os
 import logging
 import requests
+from cf_pages_delete_previews import config
 
 log = logging.getLogger(__name__)
 
-ACCOUNT_ID = os.environ["CF_ACCOUNT_ID"]
-AUTH_EMAIL = os.environ["CF_AUTH_EMAIL"]
-API_KEY = os.environ["CF_API_KEY"]
 
-globalHeaders = {
-    "content-type": "application/json;charset=UTF-8",
-    "X-Auth-Email": AUTH_EMAIL,
-    "X-Auth-Key": API_KEY
-}
-
-ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
-    ACCOUNT_ID)
-
-def get_projects():
+def get_projects(cf_config:type[config.Configuration]):
     projects = requests.get(
-        ACCOUNT_URL + "/pages/projects", headers=globalHeaders, timeout=5)
+        cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
         return projects.json()
     return None
 
-def get_deployments(project_name):
+def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = requests.get(
-        ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=globalHeaders, timeout=5)
+        cf_config.account_url + "/pages/projects/" + project_name + "/deployments", headers=cf_config.headers, timeout=5)
     return deployments.json()
 
 def delete_eligible(deployment):
@@ -36,26 +24,25 @@ def delete_eligible(deployment):
         return True
     return None
 
-def delete_project_revisions(project, args):
+def delete_project_revisions(project, cf_config:type[config.Configuration], args):
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
     what_if = "Would take action: " if vars(args).get("whatif") else ""
 
     log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
-    deployments = get_deployments(project["name"])
-    deployments_to_delete = filter(delete_eligible, deployments["result"])
+    deployments = get_deployments(project["name"],cf_config)
 
-    for deployment in deployments_to_delete:
+    for deployment in filter(delete_eligible, deployments["result"]):
         log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
             (what_if, deployment["id"], project_identifier))
 
-        delete_endpoint = ACCOUNT_URL + "/pages/projects/" + \
+        delete_endpoint = cf_config.account_url + "/pages/projects/" + \
             project["name"] + "/deployments/" + deployment["id"]
 
         if not vars(args).get("whatif"):
             delete_request = requests.delete(
-                delete_endpoint, headers=globalHeaders, timeout=5)
+                delete_endpoint, headers=cf_config.headers, timeout=5)
 
             if delete_request.json()["success"] == True:
                 log.info(

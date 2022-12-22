@@ -13,15 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.2.2
-          virtualenvs-create: true
-          virtualenvs-in-project: false
+      - name: Install poetry
+        run: pipx install poetry
 
-      - name: Install dependencies
-        run: poetry install --with dev
+      - name: Python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: '.python-version'
+          cache: 'poetry'
+
+      - name: Poetry Install
+        run: poetry install --with dev,release
 
       - name: Pytest
         run: poetry run pytest
@@ -38,12 +40,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Python setup
+        uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
+          cache: 'poetry'
+
+      - name: Poetry Install
+        run: poetry install --with dev,release
+
       - name: Semantic Release
         run: |
-          pip install python-semantic-release
           git config user.name github-actions
           git config user.email github-actions@github.com
-          semantic-release publish
+          poetry run semantic-release publish
