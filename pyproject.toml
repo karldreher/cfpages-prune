@@ -35,10 +35,9 @@ build-backend = "poetry.core.masonry.api"
 cfpages-prune = 'cf_pages_delete_previews.cli:main'
 
 [tool.semantic_release]
-version_variable = [
-    "cf_pages_delete_previews/__init__.py:__version__",
-    "pyproject.toml:version"
-]
+version_variable = "cf_pages_delete_previews/__init__.py:__version__"
+version.toml = "pyproject.toml:tool.poetry.version"
+
 branch = "main"
 upload_to_pypi = false
 upload_to_release = true
