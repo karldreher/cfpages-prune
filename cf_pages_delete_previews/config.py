@@ -1,7 +1,9 @@
 import os
+from dataclasses import dataclass
 import logging
 log = logging.getLogger(__name__)
 
+@dataclass
 class Configuration:
     def __init__(self):
         self.ACCOUNT_ID = os.environ.get("CF_ACCOUNT_ID")
@@ -17,6 +19,6 @@ class Configuration:
         self.ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
             self.ACCOUNT_ID)
 
-        if all(list(self.__dict__.values())) == False:
+        if not all(list(self.__dict__.values())):
             log.error("One or more values are not set properly.  CF_ACCOUNT_ID, CF_AUTH_EMAIL, and CF_API_KEY must be set as environment variables.")
             log.error("Current configuration: %s",self.__dict__)
