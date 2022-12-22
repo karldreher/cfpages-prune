@@ -1,4 +1,3 @@
-import os
 import logging
 import requests
 from cf_pages_delete_previews import config
@@ -8,14 +7,14 @@ log = logging.getLogger(__name__)
 
 def get_projects(cf_config:type[config.Configuration]):
     projects = requests.get(
-        cf_config.ACCOUNT_URL + "/pages/projects", headers=cf_config.HEADERS, timeout=5)
+        cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
         return projects.json()
     return None
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = requests.get(
-        cf_config.ACCOUNT_URL + "/pages/projects/" + project_name + "/deployments", headers=cf_config.HEADERS, timeout=5)
+        cf_config.account_url + "/pages/projects/" + project_name + "/deployments", headers=cf_config.headers, timeout=5)
     return deployments.json()
 
 def delete_eligible(deployment):
@@ -33,18 +32,17 @@ def delete_project_revisions(project, cf_config:type[config.Configuration], args
     log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
     deployments = get_deployments(project["name"],cf_config)
-    deployments_to_delete = filter(delete_eligible, deployments["result"])
 
-    for deployment in deployments_to_delete:
+    for deployment in filter(delete_eligible, deployments["result"]):
         log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
             (what_if, deployment["id"], project_identifier))
 
-        delete_endpoint = cf_config.ACCOUNT_URL + "/pages/projects/" + \
+        delete_endpoint = cf_config.account_url + "/pages/projects/" + \
             project["name"] + "/deployments/" + deployment["id"]
 
         if not vars(args).get("whatif"):
             delete_request = requests.delete(
-                delete_endpoint, headers=cf_config.HEADERS, timeout=5)
+                delete_endpoint, headers=cf_config.headers, timeout=5)
 
             if delete_request.json()["success"] == True:
                 log.info(

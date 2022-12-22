@@ -6,19 +6,19 @@ log = logging.getLogger(__name__)
 @dataclass
 class Configuration:
     def __init__(self):
-        self.ACCOUNT_ID = os.environ.get("CF_ACCOUNT_ID")
-        self.AUTH_EMAIL = os.environ.get("CF_AUTH_EMAIL")
-        self.API_KEY = os.environ.get("CF_API_KEY")
+        self.account_id = os.environ.get("CF_ACCOUNT_ID")
+        self.auth_email = os.environ.get("CF_AUTH_EMAIL")
+        self.api_key = os.environ.get("CF_API_KEY")
 
-        self.HEADERS = {
+        self.headers = {
             "content-type": "application/json;charset=UTF-8",
-            "X-Auth-Email": self.AUTH_EMAIL,
-            "X-Auth-Key": self.API_KEY
+            "X-Auth-Email": self.auth_email,
+            "X-Auth-Key": self.api_key
         }
 
-        self.ACCOUNT_URL = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
-            self.ACCOUNT_ID)
+        self.account_url = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
+            self.account_id)
 
         if not all(list(self.__dict__.values())):
-            log.error("One or more values are not set properly.  CF_ACCOUNT_ID, CF_AUTH_EMAIL, and CF_API_KEY must be set as environment variables.")
+            log.error("One or more values are not set properly.  CF_account_id, CF_auth_email, and CF_api_key must be set as environment variables.")
             log.error("Current configuration: %s",self.__dict__)
