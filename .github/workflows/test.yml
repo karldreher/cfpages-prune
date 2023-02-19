@@ -32,6 +32,10 @@ jobs:
           CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
           CF_API_KEY: ${{ secrets.API_KEY }}
 
+      - name: Semantic Release Preview
+        run: |
+          poetry run semantic-release print-version
+
   release:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore(release):')
