@@ -3,17 +3,17 @@ import requests
 from cf_pages_delete_previews import config
 
 log = logging.getLogger(__name__)
-
+session = requests.Session()
 
 def get_projects(cf_config:type[config.Configuration]):
-    projects = requests.get(
+    projects = session.get(
         cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
         return projects.json()
     return None
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
-    deployments = requests.get(
+    deployments = session.get(
         cf_config.account_url + "/pages/projects/" + project_name + "/deployments", headers=cf_config.headers, timeout=5)
     return deployments.json()
 
@@ -41,7 +41,7 @@ def delete_project_revisions(project, cf_config:type[config.Configuration], args
             project["name"] + "/deployments/" + deployment["id"]
 
         if not vars(args).get("whatif"):
-            delete_request = requests.delete(
+            delete_request = session.delete(
                 delete_endpoint, headers=cf_config.headers, timeout=5)
 
             if delete_request.json()["success"] == True:
