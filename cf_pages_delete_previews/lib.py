@@ -20,7 +20,7 @@ def get_deployments(project_name,cf_config:type[config.Configuration]):
 def delete_eligible(deployment):
     if deployment.get("environment") == "production":
         return False
-    if deployment.get("aliases") is None and deployment.get("name"):
+    if deployment.get("aliases") is None and deployment.get("environment")=="preview":
         return True
     return None
 

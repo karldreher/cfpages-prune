@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cfpages-prune"
-version = "0.0.1"
+version = "0.1.0"
 description = "Delete preview deployments of Cloudflare Pages across an entire Cloudflare account."
 authors = ["Karl Dreher <karldreher@outlook.com>"]
 license = "MIT"
