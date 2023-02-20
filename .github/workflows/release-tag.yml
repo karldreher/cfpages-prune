@@ -20,3 +20,5 @@ jobs:
         run: |
           version=$(git tag -l | tail -1)
           gh release create $version --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
