@@ -3,6 +3,7 @@ name: Release from Tag
 on:
   push:
     tags:
+    - v**
 
 # This is a bit lame, because semver publish "should" in theory be doing this for us, but I read the docs long enough to not understand why it doesn't.
 # This workflow is therefore a workaround until such time that can be repaired.
