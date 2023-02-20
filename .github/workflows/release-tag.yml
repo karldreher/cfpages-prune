@@ -19,7 +19,7 @@ jobs:
 
       - name: Create Release from latest tag
         run: |
-          version=$(git tag -l | tail -1)
+          version=$(git describe --tags --abbrev=0)
           gh release create $version --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
