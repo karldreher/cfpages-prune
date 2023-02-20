@@ -8,4 +8,4 @@ def test_redact():
         "accountID":"12345",
         "everythingElse":"Some Non Secret Stuff"
     }
-    assert not config.redact(secretData).__dict__.get("api_key")
+    assert not config.redact(secretData).get("api_key")
