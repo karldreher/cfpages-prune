@@ -1,0 +1,22 @@
+name: Release from Tag
+
+on:
+  push:
+    tags:
+
+# This is a bit lame, because semver publish "should" in theory be doing this for us, but I read the docs long enough to not understand why it doesn't.
+# This workflow is therefore a workaround until such time that can be repaired.
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Release from latest tag
+        run: |
+          version=$(git tag -l | tail -1)
+          gh release create $version --generate-notes
