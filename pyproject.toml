@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cfpages-prune"
-version = "0.1.0"
+version = "0.2.0"
 description = "Delete preview deployments of Cloudflare Pages across an entire Cloudflare account."
 authors = ["Karl Dreher <karldreher@outlook.com>"]
 license = "MIT"
@@ -36,7 +36,7 @@ cfpages-prune = 'cf_pages_delete_previews.cli:main'
 
 [tool.semantic_release]
 version_variable = "cf_pages_delete_previews/__init__.py:__version__"
-version.toml = "pyproject.toml:tool.poetry.version"
+version_toml = "pyproject.toml:tool.poetry.version"
 
 branch = "main"
 upload_to_pypi = false
