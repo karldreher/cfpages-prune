@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2023-02-20)
+### Fix
+* Semver version_toml ([#20](https://github.com/karldreher/cfpages-prune/issues/20)) ([`dd15865`](https://github.com/karldreher/cfpages-prune/commit/dd158650f0e6791da28e3e6cf6354e4bf393c17f))
+
 ## v0.2.0 (2023-02-19)
 ### Feature
 * Sessions ([#19](https://github.com/karldreher/cfpages-prune/issues/19)) ([`c8d44ab`](https://github.com/karldreher/cfpages-prune/commit/c8d44abdf65de7c32ba29b57479d8567ded2fd85))
