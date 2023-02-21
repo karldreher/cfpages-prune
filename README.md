@@ -39,12 +39,11 @@ When using Github Actions (as is done in `.github/workflows/main.yml`), these th
 Other options which can manipulate usage can be described succinctly using `--help`:
 
 ```
-> cfpages-prune
+> cfpages-prune --help
 usage: cfpages-prune [-h] [--redact] [--whatif]
 
-optional arguments:
-  -h, --help  show this help message and exit
-  --redact    When "--redact" is used, project names will be replaced with IDs
-              in log output.
-  --whatif    When "--whatif" is used, delete action will be skipped.
+options:
+  -h, --help           show this help message and exit
+  --redact             When "--redact" is used, project names will be replaced with IDs in log output.
+  --whatif, --dry-run  When "--whatif" is used, delete action will be skipped.
 ```
