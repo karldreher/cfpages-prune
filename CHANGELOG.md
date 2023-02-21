@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.2 (2023-02-21)
+### Fix
+* Secrets leakage ([#23](https://github.com/karldreher/cfpages-prune/issues/23)) ([`fd7e98f`](https://github.com/karldreher/cfpages-prune/commit/fd7e98fbde7bb0fe584a8cfff594d0ff67f5e2a2))
+
 ## v0.2.1 (2023-02-20)
 ### Fix
 * Semver version_toml ([#20](https://github.com/karldreher/cfpages-prune/issues/20)) ([`dd15865`](https://github.com/karldreher/cfpages-prune/commit/dd158650f0e6791da28e3e6cf6354e4bf393c17f))
