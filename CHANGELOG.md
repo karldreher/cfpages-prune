@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2023-02-21)
+### Feature
+* Dry run alias ([#26](https://github.com/karldreher/cfpages-prune/issues/26)) ([`73cfef5`](https://github.com/karldreher/cfpages-prune/commit/73cfef5879b543f1f40bd98fc9f4d4127fbbbdce))
+
 ## v0.2.2 (2023-02-21)
 ### Fix
 * Secrets leakage ([#23](https://github.com/karldreher/cfpages-prune/issues/23)) ([`fd7e98f`](https://github.com/karldreher/cfpages-prune/commit/fd7e98fbde7bb0fe584a8cfff594d0ff67f5e2a2))
