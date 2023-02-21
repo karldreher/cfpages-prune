@@ -11,8 +11,8 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--redact", action="store_true", default=False, required=False,
                         help="When \"--redact\" is used, project names will be replaced with IDs in log output.")
-    argparser.add_argument("--whatif", action="store_true", default=False, required=False,
-                        help="When \"--whatif\" is used, delete action will be skipped.")
+    argparser.add_argument("--whatif", "--dry-run", action="store_true", default=False, required=False,
+                        help="When \"--whatif\" or \"--dry-run\" is used, delete action will be skipped.")
 
     args = argparser.parse_args()
     cf_config = config.Configuration()
