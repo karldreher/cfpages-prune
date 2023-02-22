@@ -19,7 +19,7 @@ def main():
 
     projects = lib.get_projects(cf_config)
     if projects is not None:
-        for project in projects["result"]:
+        for project in projects:
             lib.delete_project_revisions(project, cf_config, args)
     else:
         log.error("No projects found")

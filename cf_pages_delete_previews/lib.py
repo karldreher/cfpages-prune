@@ -6,10 +6,14 @@ log = logging.getLogger(__name__)
 session = requests.Session()
 
 def get_projects(cf_config:type[config.Configuration]):
+    projectList = []
     projects = session.get(
         cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
-        return projects.json()
+        for project in projects.json()["result"]:
+            projectItem = dict(filter(lambda item: item[0] in ['name','id'], project.items()))
+            projectList.append(projectItem)
+        return projectList
     return None
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
