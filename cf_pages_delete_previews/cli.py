@@ -13,13 +13,14 @@ def main():
                         help="When \"--redact\" is used, project names will be replaced with IDs in log output.")
     argparser.add_argument("--whatif", "--dry-run", action="store_true", default=False, required=False,
                         help="When \"--whatif\" or \"--dry-run\" is used, delete action will be skipped.")
+    argparser.add_argument("--projects",action="store",required=False,help="List of project names where revisions should be deleted.  Comma-delimited.")
 
     args = argparser.parse_args()
     cf_config = config.Configuration()
 
     projects = lib.get_projects(cf_config)
     if projects is not None:
-        for project in projects:
+        for project in lib.filter_projects(projects,args):
             lib.delete_project_revisions(project, cf_config, args)
     else:
         log.error("No projects found")
