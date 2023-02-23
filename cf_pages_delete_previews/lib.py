@@ -12,18 +12,23 @@ def get_projects(cf_config:type[config.Configuration]):
     if projects.ok:
         for project in projects.json()["result"]:
             projectItem = dict(filter(lambda item: item[0] in ['name','id'], project.items()))
-            projectList.append(projectItem.items())
+            projectList.append(projectItem)
         return projectList
     return None
 
-def filter_projects(projectList:list,args):
-    if vars(args).get("projects"):
-        projectFilter = [projects for projects in vars(args).get("projects").split(",")]
+def filter_projects(projectList:list,projectFilter=config.ProjectFilter):
+    if projectFilter.projects is not None:
+        projectFilter = [projects for projects in projectFilter.projects.split(",")]
         projects = filter(lambda item: item.get('name') in projectFilter, projectList)
         return projects
-    # TODO elif projectId
-    else:
+
+    elif projectFilter.projectids is not None:
+        projectFilter = [projects for projects in projectFilter.projectids.split(",")]
+        projects = filter(lambda item: item.get('id') in projectFilter, projectList)
         return projects
+
+    else:
+        return projectList
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = session.get(

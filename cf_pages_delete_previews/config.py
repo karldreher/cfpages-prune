@@ -4,12 +4,18 @@ import logging
 log = logging.getLogger(__name__)
 
 @dataclass
+class ProjectFilter:
+    def __init__(self,args) -> None:
+        self.projects = vars(args).get("projects") if vars(args).get("projects") else None
+        self.projectids = vars(args).get("projectids") if vars(args).get("projectids") else None
+
+
+@dataclass
 class Configuration:
     def __init__(self):
         self.account_id = os.environ.get("CF_ACCOUNT_ID")
         self.auth_email = os.environ.get("CF_AUTH_EMAIL")
         self.api_key = os.environ.get("CF_API_KEY")
-
         self.headers = {
             "content-type": "application/json;charset=UTF-8",
             "X-Auth-Email": self.auth_email,
