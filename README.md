@@ -1,6 +1,6 @@
 # cfpages-prune
 
-This project contains a Python script for deleting preview deployments of **all** Cloudflare Pages projects within an account.  It is intended to be run as a scheduled job, e.g. with Github Actions.
+This project contains a Python script for deleting preview deployments of **any** (up to and including all) Cloudflare Pages projects within an account.  It is intended to be run as a scheduled job, e.g. with Github Actions.
 
 ## Build
 
@@ -40,10 +40,31 @@ Other options which can manipulate usage can be described succinctly using `--he
 
 ```
 > cfpages-prune --help
-usage: cfpages-prune [-h] [--redact] [--whatif]
+usage: cfpages-prune [-h] [--projects PROJECTS] [--projectids PROJECTIDS] [--redact] [--whatif]
 
 options:
-  -h, --help           show this help message and exit
-  --redact             When "--redact" is used, project names will be replaced with IDs in log output.
-  --whatif, --dry-run  When "--whatif" is used, delete action will be skipped.
+  -h, --help            show this help message and exit
+  --projects PROJECTS, --project PROJECTS
+                        Comma-delimited list of project names where revisions should be deleted.
+  --projectids PROJECTIDS, --projectid PROJECTIDS
+                        Comma-delimited list of project IDs where revisions should be deleted.
+  --redact              When "--redact" is used, project names will be replaced with IDs in log output. Cannot be used
+                        in conjunction with --projects.
+  --whatif, --dry-run   When "--whatif" or "--dry-run" is used, delete action will be skipped.
+```
+
+### Safety
+This tool is designed with **safety** and **privacy** in mind.
+As explained by `--help`, the options `--redact` and `--whatif` are designed for DevOps engineers to mask output in a way that can be used in a multitude of environments and secure scenarios, as well as safely test.
+
+### Usage Examples
+
+Delete only projects in `my-cool-project` and `the-awesome-project`:
+```
+cfpages-prune --projects my-cool-project,the-awesome-project
+```
+
+Safely see what operations will be performed on Cloudflare project IDs 206509b1-db55-4674-8a67-ad5089cf81fc and ab2d7740-ebd2-4701-b2ff-dfb3dcbc8d29:
+```
+cfpages-prune --projectids 206509b1-db55-4674-8a67-ad5089cf81fc,ab2d7740-ebd2-4701-b2ff-dfb3dcbc8d29 --whatif
 ```
