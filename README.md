@@ -17,6 +17,8 @@ poetry install --with=dev
 
 ## Usage
 
+This tool is designed with CI/CD in mind, and is appropriate for automated, scheduled use.
+
 This tool is easiest to install using Pipx, after which it can be run using a convenient name:
 ```bash
 pipx install git+https://github.com/karldreher/cfpages-prune.git
@@ -32,8 +34,6 @@ The tool assumes that the following environment variables are set:
 
 `CF_API_KEY` - This **MUST** be a Global API key.  This is not a limitation of this tool, but one of the Cloudflare API.  (Pages projects **read** access currently requires this.)
 
-
-When using Github Actions (as is done in `.github/workflows/main.yml`), these three environment variables must be specified as [Secrets within the repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository).
 
 ### Options
 Other options which can manipulate usage can be described succinctly using `--help`:
