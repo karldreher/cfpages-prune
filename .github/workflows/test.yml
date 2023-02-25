@@ -28,7 +28,7 @@ jobs:
         run: poetry install --with dev,release
 
       - name: Pytest
-        run: poetry run pytest
+        run: poetry run pytest -v
         env:
           CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
