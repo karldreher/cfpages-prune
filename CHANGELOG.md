@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.0 (2023-02-25)
+### Feature
+* Specify projects ([#28](https://github.com/karldreher/cfpages-prune/issues/28)) ([`5fb3abb`](https://github.com/karldreher/cfpages-prune/commit/5fb3abbd916e68c6511582bbae8dabb0cb0645e4))
+
+### Breaking
+* Several non-backwards compatible changes were made in this update. ([`5fb3abb`](https://github.com/karldreher/cfpages-prune/commit/5fb3abbd916e68c6511582bbae8dabb0cb0645e4))
+* Making the project more adaptable for general use ([`5fb3abb`](https://github.com/karldreher/cfpages-prune/commit/5fb3abbd916e68c6511582bbae8dabb0cb0645e4))
+
 ## v0.3.0 (2023-02-21)
 ### Feature
 * Dry run alias ([#26](https://github.com/karldreher/cfpages-prune/issues/26)) ([`73cfef5`](https://github.com/karldreher/cfpages-prune/commit/73cfef5879b543f1f40bd98fc9f4d4127fbbbdce))
