@@ -1,9 +1,9 @@
 """Console script for cf_pages_delete_previews."""
 import argparse
-import sys
 import logging
-from cf_pages_delete_previews import lib
-from cf_pages_delete_previews import config
+import sys
+
+from cf_pages_delete_previews import config, lib
 
 log = logging.getLogger(__name__)
 def main():

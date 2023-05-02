@@ -1,6 +1,8 @@
 import logging
-import requests
 from concurrent.futures import ThreadPoolExecutor
+
+import requests
+
 from cf_pages_delete_previews import config
 
 log = logging.getLogger(__name__)
