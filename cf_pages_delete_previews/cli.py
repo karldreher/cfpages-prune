@@ -24,7 +24,7 @@ def main():
     projectFilter = config.ProjectFilter(args)
 
     projects = lib.get_projects(cf_config)
-    if projects is not None:
+    if projects.__len__()!=0:
         for project in lib.filter_projects(projects,projectFilter):
             lib.delete_project_revisions(project, cf_config, args)
     else:

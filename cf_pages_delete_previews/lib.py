@@ -8,7 +8,15 @@ from cf_pages_delete_previews import config
 log = logging.getLogger(__name__)
 session = requests.Session()
 
-def get_projects(cf_config:type[config.Configuration]):
+def get_projects(cf_config:type[config.Configuration])->list:
+    '''Return a list of projects.
+
+    Args:
+        cf_config (Configuration): A configuration object.
+
+    Returns:
+        list: A list of projects.
+    '''
     project_list = []
     projects = session.get(
         cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
@@ -17,7 +25,7 @@ def get_projects(cf_config:type[config.Configuration]):
             projectItem = dict(filter(lambda item: item[0] in ['name','id'], project.items()))
             project_list.append(projectItem)
         return project_list
-    return None
+    return []
 
 def filter_projects(project_list:list,project_filter=config.ProjectFilter)->list:
     '''Return a list of projects that match the filter criteria.
