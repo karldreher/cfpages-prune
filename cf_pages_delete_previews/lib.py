@@ -9,21 +9,21 @@ log = logging.getLogger(__name__)
 session = requests.Session()
 
 def get_projects(cf_config:type[config.Configuration]):
-    projectList = []
+    project_list = []
     projects = session.get(
         cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
         for project in projects.json()["result"]:
             projectItem = dict(filter(lambda item: item[0] in ['name','id'], project.items()))
-            projectList.append(projectItem)
-        return projectList
+            project_list.append(projectItem)
+        return project_list
     return None
 
-def filter_projects(projectList:list,project_filter=config.ProjectFilter)->list:
+def filter_projects(project_list:list,project_filter=config.ProjectFilter)->list:
     '''Return a list of projects that match the filter criteria.
 
     Args:
-        projectList (list): A list of projects.
+        project_list (list): A list of projects.
         project_filter (ProjectFilter): A filter object.
 
     Returns:
@@ -31,15 +31,15 @@ def filter_projects(projectList:list,project_filter=config.ProjectFilter)->list:
     '''
     if project_filter.projects is not None:
         project_filter = list(project_filter.projects.split(','))
-        projects = filter(lambda item: item.get('name') in project_filter, projectList)
+        projects = filter(lambda item: item.get('name') in project_filter, project_list)
         return projects
 
     if project_filter.projectids is not None:
         project_filter = list(project_filter.projectids.split(','))
-        projects = filter(lambda item: item.get('id') in project_filter, projectList)
+        projects = filter(lambda item: item.get('id') in project_filter, project_list)
         return projects
     # if no filter is specified, return all projects
-    return projectList
+    return project_list
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = session.get(
