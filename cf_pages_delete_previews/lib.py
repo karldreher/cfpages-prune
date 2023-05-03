@@ -61,7 +61,7 @@ def delete_eligible(deployment):
         return True
     return None
 
-def delete_single_revision(deployment:str, project, project_identifier, args):
+def delete_single_revision(deployment:str, cf_config:type[config.Configuration], project, project_identifier, args):
     what_if = "Would take action: " if vars(args).get("whatif") else ""
 
     log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
@@ -70,6 +70,7 @@ def delete_single_revision(deployment:str, project, project_identifier, args):
     delete_endpoint = cf_config.account_url + "/pages/projects/" + \
         project["name"] + "/deployments/" + deployment["id"]
 
+    #  if --whatif is not specified, delete the deployment
     if not vars(args).get("whatif"):
         delete_request = session.delete(
             delete_endpoint, headers=cf_config.headers, timeout=5)
@@ -90,7 +91,7 @@ def delete_project_revisions(project, cf_config:type[config.Configuration], args
     deployments = get_deployments(project["name"],cf_config)
     for deployment in filter(delete_eligible, deployments["result"]):
         with ThreadPoolExecutor(max_workers=3) as executor:
-            job = executor.submit(delete_single_revision, deployment, project, project_identifier, args)
+            job = executor.submit(delete_single_revision, deployment, cf_config, project, project_identifier, args)
 
     if vars(args).get("whatif"):
         log.info("What if scenario: No action taken.")
