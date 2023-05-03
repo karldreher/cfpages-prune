@@ -19,19 +19,27 @@ def get_projects(cf_config:type[config.Configuration]):
         return projectList
     return None
 
-def filter_projects(projectList:list,projectFilter=config.ProjectFilter):
-    if projectFilter.projects is not None:
-        projectFilter = [projects for projects in projectFilter.projects.split(",")]
-        projects = filter(lambda item: item.get('name') in projectFilter, projectList)
+def filter_projects(projectList:list,project_filter=config.ProjectFilter)->list:
+    '''Return a list of projects that match the filter criteria.
+
+    Args:
+        projectList (list): A list of projects.
+        project_filter (ProjectFilter): A filter object.
+
+    Returns:
+        list: A list of projects that match the filter criteria.
+    '''
+    if project_filter.projects is not None:
+        project_filter = list(project_filter.projects.split(','))
+        projects = filter(lambda item: item.get('name') in project_filter, projectList)
         return projects
 
-    elif projectFilter.projectids is not None:
-        projectFilter = [projects for projects in projectFilter.projectids.split(",")]
-        projects = filter(lambda item: item.get('id') in projectFilter, projectList)
+    if project_filter.projectids is not None:
+        project_filter = list(project_filter.projectids.split(','))
+        projects = filter(lambda item: item.get('id') in project_filter, projectList)
         return projects
-
-    else:
-        return projectList
+    # if no filter is specified, return all projects
+    return projectList
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = session.get(
