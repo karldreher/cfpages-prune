@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.0 (2023-05-03)
+### Feature
+* Concurrency and code improvement ([#29](https://github.com/karldreher/cfpages-prune/issues/29)) ([`fdbacb3`](https://github.com/karldreher/cfpages-prune/commit/fdbacb3fcf78b8cafcd886483da8b1a706c7806b))
+
 ## v1.0.0 (2023-02-25)
 ### Feature
 * Specify projects ([#28](https://github.com/karldreher/cfpages-prune/issues/28)) ([`5fb3abb`](https://github.com/karldreher/cfpages-prune/commit/5fb3abbd916e68c6511582bbae8dabb0cb0645e4))
