@@ -1,34 +1,53 @@
 import logging
+from concurrent.futures import ThreadPoolExecutor
+
 import requests
+
 from cf_pages_delete_previews import config
 
 log = logging.getLogger(__name__)
 session = requests.Session()
 
-def get_projects(cf_config:type[config.Configuration]):
-    projectList = []
+def get_projects(cf_config:type[config.Configuration])->list:
+    '''Return a list of projects.
+
+    Args:
+        cf_config (Configuration): A configuration object.
+
+    Returns:
+        list: A list of projects.
+    '''
+    project_list = []
     projects = session.get(
         cf_config.account_url + "/pages/projects", headers=cf_config.headers, timeout=5)
     if projects.ok:
         for project in projects.json()["result"]:
             projectItem = dict(filter(lambda item: item[0] in ['name','id'], project.items()))
-            projectList.append(projectItem)
-        return projectList
-    return None
+            project_list.append(projectItem)
+        return project_list
+    return []
 
-def filter_projects(projectList:list,projectFilter=config.ProjectFilter):
-    if projectFilter.projects is not None:
-        projectFilter = [projects for projects in projectFilter.projects.split(",")]
-        projects = filter(lambda item: item.get('name') in projectFilter, projectList)
+def filter_projects(project_list:list,project_filter=config.ProjectFilter)->list:
+    '''Return a list of projects that match the filter criteria.
+
+    Args:
+        project_list (list): A list of projects.
+        project_filter (ProjectFilter): A filter object.
+
+    Returns:
+        list: A list of projects that match the filter criteria.
+    '''
+    if project_filter.projects is not None:
+        project_filter = list(project_filter.projects.split(','))
+        projects = filter(lambda item: item.get('name') in project_filter, project_list)
         return projects
 
-    elif projectFilter.projectids is not None:
-        projectFilter = [projects for projects in projectFilter.projectids.split(",")]
-        projects = filter(lambda item: item.get('id') in projectFilter, projectList)
+    if project_filter.projectids is not None:
+        project_filter = list(project_filter.projectids.split(','))
+        projects = filter(lambda item: item.get('id') in project_filter, project_list)
         return projects
-
-    else:
-        return projectList
+    # if no filter is specified, return all projects
+    return project_list
 
 def get_deployments(project_name,cf_config:type[config.Configuration]):
     deployments = session.get(
@@ -42,32 +61,37 @@ def delete_eligible(deployment):
         return True
     return None
 
+def delete_single_revision(deployment:str, cf_config:type[config.Configuration], project, project_identifier, args):
+    what_if = "Would take action: " if vars(args).get("whatif") else ""
+
+    log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
+    (what_if, deployment["id"], project_identifier))
+
+    delete_endpoint = cf_config.account_url + "/pages/projects/" + \
+        project["name"] + "/deployments/" + deployment["id"]
+
+    #  if --whatif is not specified, delete the deployment
+    if not vars(args).get("whatif"):
+        delete_request = session.delete(
+            delete_endpoint, headers=cf_config.headers, timeout=5)
+
+        if delete_request.json()["success"] == True:
+            log.info(
+                "Delete request for deployment '%s' was successful.", deployment["id"])
+        else:
+            log.error("Delete request for deployment '%s' was not successful.  Additional information from the request is included below.", deployment["id"])
+            log.error(delete_request.json())
+
 def delete_project_revisions(project, cf_config:type[config.Configuration], args):
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
-    what_if = "Would take action: " if vars(args).get("whatif") else ""
 
     log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
     deployments = get_deployments(project["name"],cf_config)
-
     for deployment in filter(delete_eligible, deployments["result"]):
-        log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
-            (what_if, deployment["id"], project_identifier))
-
-        delete_endpoint = cf_config.account_url + "/pages/projects/" + \
-            project["name"] + "/deployments/" + deployment["id"]
-
-        if not vars(args).get("whatif"):
-            delete_request = session.delete(
-                delete_endpoint, headers=cf_config.headers, timeout=5)
-
-            if delete_request.json()["success"] == True:
-                log.info(
-                    "Delete request for deployment '%s' was successful.", deployment["id"])
-            else:
-                log.error("Delete request for deployment '%s' was not successful.  Additional information from the request is included below.", deployment["id"])
-                log.error(delete_request.json())
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            job = executor.submit(delete_single_revision, deployment, cf_config, project, project_identifier, args)
 
     if vars(args).get("whatif"):
         log.info("What if scenario: No action taken.")

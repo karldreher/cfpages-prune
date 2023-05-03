@@ -1,6 +1,7 @@
-from cf_pages_delete_previews import lib
-from cf_pages_delete_previews import config
 import argparse
+
+from cf_pages_delete_previews import config, lib
+
 argparser = argparse.ArgumentParser()
 
 class MockArgs():

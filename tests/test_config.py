@@ -1,5 +1,6 @@
 from cf_pages_delete_previews import config
 
+
 def test_redact():
 
     secretData = {
