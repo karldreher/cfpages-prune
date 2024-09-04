@@ -23,7 +23,7 @@ pylint = "^3.2.7"
 optional = true
 
 [tool.poetry.group.release.dependencies]
-python-semantic-release = "7.33.2"
+python-semantic-release = "9.8.8"
 
 
 
