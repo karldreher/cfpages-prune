@@ -5,23 +5,29 @@ from cf_pages_delete_previews import config, lib
 argparser = argparse.ArgumentParser()
 
 class MockArgs():
-    def __init__(self,projects:str=None,projectids:str=None):
+    def __init__(self,projects:str=None,projectids:str=None,force:bool=False):
         self.projects = projects
         self.projectids = projectids
+        self.force = force
 
 def test_delete_eligible_true():
     # Test if a eligible, deletable deployment will be marked as such.
-    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":None, "environment":"preview"}) == True
+    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":None, "environment":"preview"},MockArgs()) == True
 
 
 def test_delete_eligible_false():
     # Test that a production deployment will not be set to eligible.
-    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":"production","environment":"production"}) == False
+    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":"production","environment":"production"},MockArgs()) == False
+
+def test_delete_eligible_force():
+    # Test that a production deployment will be set to eligible if the force flag is set.
+    # This is the inverse of the test_delete_eligible_false test, demonstrating that --force will override the default behavior.
+    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":"production","environment":"production"},MockArgs(force=True)) == False
 
 
 def test_delete_eligible_none():
     # Test that junk data will not be set as either true nor false.
-    assert lib.delete_eligible({"JunkData":True,"Invalid":"probably"}) == None
+    assert lib.delete_eligible({"JunkData":True,"Invalid":"probably"},MockArgs()) == None
 
 
 projects = [{'id': '861469d7-b898-4c6a-8547-e805aad56087', 'name': 'my-cool-project'},

@@ -1,6 +1,6 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
-
+from argparse import Namespace
 import requests
 
 from cf_pages_delete_previews import config
@@ -54,7 +54,7 @@ def get_deployments(project_name,cf_config:type[config.Configuration]):
         cf_config.account_url + "/pages/projects/" + project_name + "/deployments", headers=cf_config.headers, timeout=5)
     return deployments.json()
 
-def delete_eligible(deployment):
+def delete_eligible(deployment:str,args:Namespace)->bool:
     if deployment.get("environment") == "production":
         return False
     if deployment.get("aliases") is None and deployment.get("environment")=="preview":
@@ -89,7 +89,7 @@ def delete_project_revisions(project, cf_config:type[config.Configuration], args
     log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
 
     deployments = get_deployments(project["name"],cf_config)
-    for deployment in filter(delete_eligible, deployments["result"]):
+    for deployment in filter(lambda x: delete_eligible(x, args), deployments["result"]):
         with ThreadPoolExecutor(max_workers=3) as executor:
             job = executor.submit(delete_single_revision, deployment, cf_config, project, project_identifier, args)
 

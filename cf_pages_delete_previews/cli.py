@@ -16,6 +16,7 @@ def main():
     argparser.add_argument("--projectids","--projectid",action="store",required=False,help="Comma-delimited list of project IDs where revisions should be deleted.  Default: All projects")
     ex_group_redact.add_argument("--redact", action="store_true", default=False, required=False,
                         help="When \"--redact\" is used, project names will be replaced with IDs in log output.  Cannot be used in conjunction with --projects.")
+    argparser.add_argument("--force",action="store_true", default=False, required=False,help="Force deletion of all revisions, including those in production environments.  Use with extreme caution.")
     argparser.add_argument("--whatif", "--dry-run", action="store_true", default=False, required=False,
                         help="When \"--whatif\" or \"--dry-run\" is used, delete action will be skipped.")
 
