@@ -40,16 +40,19 @@ Other options which can manipulate usage can be described succinctly using `--he
 
 ```
 > cfpages-prune --help
-usage: cfpages-prune [-h] [--projects PROJECTS] [--projectids PROJECTIDS] [--redact] [--whatif]
+usage: cfpages-prune [-h] [--list-projects] [--projects PROJECTS] [--projectids PROJECTIDS] [--redact] [--force] [--whatif]
 
 options:
   -h, --help            show this help message and exit
+  --list-projects       List all projects and exit. Ignores other arguments.
   --projects PROJECTS, --project PROJECTS
-                        Comma-delimited list of project names where revisions should be deleted.
+                        Comma-delimited list of project names where revisions should be deleted. Default: All projects
   --projectids PROJECTIDS, --projectid PROJECTIDS
-                        Comma-delimited list of project IDs where revisions should be deleted.
-  --redact              When "--redact" is used, project names will be replaced with IDs in log output. Cannot be used
-                        in conjunction with --projects.
+                        Comma-delimited list of project IDs where revisions should be deleted. Default: All projects
+  --redact              When "--redact" is used, project names will be replaced with IDs in log output. Cannot be used in
+                        conjunction with --projects.
+  --force               Force deletion of all revisions, including those in production environments. Use with extreme
+                        caution.
   --whatif, --dry-run   When "--whatif" or "--dry-run" is used, delete action will be skipped.
 ```
 
