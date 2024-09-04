@@ -22,7 +22,7 @@ def test_delete_eligible_false():
 def test_delete_eligible_force():
     # Test that a production deployment will be set to eligible if the force flag is set.
     # This is the inverse of the test_delete_eligible_false test, demonstrating that --force will override the default behavior.
-    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":"production","environment":"production"},MockArgs(force=True)) == False
+    assert lib.delete_eligible({"name":"1","deploymentID":"1","aliases":"production","environment":"production"},MockArgs(force=True)) == True
 
 
 def test_delete_eligible_none():
