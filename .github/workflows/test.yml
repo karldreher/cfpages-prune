@@ -36,7 +36,7 @@ jobs:
 
       - name: Semantic Release Preview
         run: |
-          poetry run semantic-release --version
+          semantic-release -vv --noop version --print
 
   release:
     needs: test
