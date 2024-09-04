@@ -55,7 +55,7 @@ def get_deployments(project_name,cf_config:type[config.Configuration]):
     return deployments.json()
 
 def delete_eligible(deployment:str,args:Namespace)->bool:
-    if args.get("force"):
+    if vars(args).get("force"):
         return True
     if deployment.get("environment") == "production":
         return False
