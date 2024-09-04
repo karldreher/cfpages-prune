@@ -10,6 +10,7 @@ def main():
     """Console script for cf_pages_delete_previews."""
     argparser = argparse.ArgumentParser()
     # while it looks strange and out of order, args must be in the order you want them to appear in --help
+    argparser.add_argument("--list-projects", action="store_true", default=False, required=False,help="List all projects and exit.  Ignores other arguments.")
     ex_group_redact = argparser.add_mutually_exclusive_group()
     ex_group_redact.add_argument("--projects","--project",action="store",required=False,help="Comma-delimited list of project names where revisions should be deleted.  Default: All projects")
     argparser.add_argument("--projectids","--projectid",action="store",required=False,help="Comma-delimited list of project IDs where revisions should be deleted.  Default: All projects")
@@ -24,6 +25,10 @@ def main():
     projectFilter = config.ProjectFilter(args)
 
     projects = lib.get_projects(cf_config)
+    if args.list_projects:
+        for project in projects:
+            print(f"{project['name']} ({project['id']})")
+        exit(0)
     if projects.__len__()!=0:
         for project in lib.filter_projects(projects,projectFilter):
             lib.delete_project_revisions(project, cf_config, args)
