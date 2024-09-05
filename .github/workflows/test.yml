@@ -34,6 +34,9 @@ jobs:
           CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
           CF_API_KEY: ${{ secrets.API_KEY }}
 
+      - name: Semantic Release Preview
+        run: |
+          poetry run semantic-release -vv --noop version --print
 
   release:
     needs: test
