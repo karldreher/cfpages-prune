@@ -65,6 +65,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          poetry run semantic-release -v publish
+          poetry run semantic-release -v version
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
