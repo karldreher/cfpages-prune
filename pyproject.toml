@@ -46,3 +46,6 @@ match = "(main|master)"
 [tool.semantic_release.branches.preview]
 # this is only here to get previews of release bumps
 match = ".+"
+
+[tool.semantic_release.remote.token]
+env = "GH_TOKEN"
