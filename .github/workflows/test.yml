@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.base_ref }}
 
       - name: Install poetry
         run: pipx install poetry
@@ -37,7 +34,28 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
           CF_API_KEY: ${{ secrets.API_KEY }}
+  
+  release-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.base_ref }}
 
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+          cache: 'poetry'
+
+      - name: Poetry Install
+        run: poetry install --only release
       - name: Semantic Release Preview
         run: |
           poetry run semantic-release -v --noop version --print
