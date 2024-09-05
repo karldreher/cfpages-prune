@@ -1,6 +1,7 @@
 import logging
-from concurrent.futures import ThreadPoolExecutor
 from argparse import Namespace
+from concurrent.futures import ThreadPoolExecutor
+
 import requests
 
 from cf_pages_delete_previews import config

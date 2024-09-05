@@ -23,8 +23,7 @@ class Configuration:
             "X-Auth-Key": self.api_key
         }
 
-        self.account_url = "https://api.cloudflare.com/client/v4/accounts/{0}".format(
-            self.account_id)
+        self.account_url = f"https://api.cloudflare.com/client/v4/accounts/{self.account_id}"
 
         if not all(list(self.__dict__.values())):
             log.error("One or more values are not set properly.  CF_ACCOUNT_ID, CF_AUTH_EMAIL, and CF_API_KEY must be set as environment variables.")

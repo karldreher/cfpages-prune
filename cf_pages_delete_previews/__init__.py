@@ -1,8 +1,9 @@
 __version__ = '1.2.0'
 
 import logging
-import sys
 import os
+import sys
+
 log_level = os.getenv('LOG_LEVEL', 'INFO')
 file_handler = logging.FileHandler(filename='cfpages-prune' + '.log')
 stdout_handler = logging.StreamHandler(sys.stdout)
