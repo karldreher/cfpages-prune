@@ -25,7 +25,7 @@ jobs:
       - name: Poetry Install
         run: poetry install --with dev,release
       
-      - name: pylint
+      - name: ruff check
         run: poetry run ruff check cf_pages_delete_previews -e
 
       - name: Pytest
