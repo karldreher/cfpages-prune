@@ -38,5 +38,14 @@ cfpages-prune = 'cf_pages_delete_previews.cli:main'
 version_variables = ["cf_pages_delete_previews/__init__.py:__version__"]
 version_toml = ["pyproject.toml:tool.poetry.version"]
 
-branch = "main"
 build_command = "pip install poetry && poetry build"
+
+[tool.semantic_release.branches.main]
+match = "(main|master)"
+
+[tool.semantic_release.branches.preview]
+# this is only here to get previews of release bumps
+match = ".+"
+
+[tool.semantic_release.remote.token]
+env = "GH_TOKEN"
