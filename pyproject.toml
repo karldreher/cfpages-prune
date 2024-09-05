@@ -17,7 +17,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.3.2"
-pylint = "^3.2.7"
+ruff = "^0.6.3"
 
 [tool.poetry.group.release]
 optional = true
@@ -49,3 +49,20 @@ match = ".+"
 
 [tool.semantic_release.remote.token]
 env = "GH_TOKEN"
+
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
