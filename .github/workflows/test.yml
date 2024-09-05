@@ -12,6 +12,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+          cache: 'poetry'
+
+      - name: Poetry Install
+        run: poetry install --with dev,release
+      
+      - name: ruff check
+        run: poetry run ruff check cf_pages_delete_previews -e
+
+      - name: Pytest
+        run: poetry run pytest -v
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+          CF_API_KEY: ${{ secrets.API_KEY }}
+  
+  release-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.base_ref }}
@@ -26,15 +55,7 @@ jobs:
           cache: 'poetry'
 
       - name: Poetry Install
-        run: poetry install --with dev,release
-
-      - name: Pytest
-        run: poetry run pytest -v
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-          CF_AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
-          CF_API_KEY: ${{ secrets.API_KEY }}
-
+        run: poetry install --only release
       - name: Semantic Release Preview
         run: |
           poetry run semantic-release -v --noop version --print
@@ -65,6 +86,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          poetry run semantic-release -v publish
+          poetry run semantic-release -v version
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
