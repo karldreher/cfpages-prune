@@ -67,8 +67,7 @@ def delete_eligible(deployment:str,args:Namespace)->bool:
 def delete_single_revision(deployment:str, cf_config:type[config.Configuration], project:str, project_identifier:str, args:Namespace):
     what_if = "Would take action: " if vars(args).get("whatif") else ""
 
-    log.info("%sDeleting deployment \'%s\' from project \'%s\'..." %
-    (what_if, deployment["id"], project_identifier))
+    log.info("{}Deleting deployment \'{}\' from project \'{}\'...".format(what_if, deployment["id"], project_identifier))
 
     delete_endpoint = cf_config.account_url + "/pages/projects/" + \
         project["name"] + "/deployments/" + deployment["id"]
@@ -78,7 +77,7 @@ def delete_single_revision(deployment:str, cf_config:type[config.Configuration],
         delete_request = session.delete(
             delete_endpoint, headers=cf_config.headers, timeout=5)
 
-        if delete_request.json()["success"] == True:
+        if delete_request.json()["success"] is True:
             log.info(
                 "Delete request for deployment '%s' was successful.", deployment["id"])
         else:
@@ -89,12 +88,12 @@ def delete_project_revisions(project:str, cf_config:type[config.Configuration], 
     # although project_identifier allows redacting project name, it is still mandatory for api calls.
     project_identifier = project["id"] if vars(args).get("redact") else project["name"]
 
-    log.info("Started working on project %s with options: %s" % (project_identifier, vars(args)))
+    log.info(f"Started working on project {project_identifier} with options: {vars(args)}")
 
     deployments = get_deployments(project["name"],cf_config)
     for deployment in filter(lambda x: delete_eligible(x, args), deployments["result"]):
         with ThreadPoolExecutor(max_workers=3) as executor:
-            job = executor.submit(delete_single_revision, deployment, cf_config, project, project_identifier, args)
+            executor.submit(delete_single_revision, deployment, cf_config, project, project_identifier, args)
 
     if vars(args).get("whatif"):
         log.info("What if scenario: No action taken.")
